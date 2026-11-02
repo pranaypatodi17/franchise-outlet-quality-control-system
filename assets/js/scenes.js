@@ -227,6 +227,7 @@
     const s = DRAW[scene](defects || []);
     let overlay = '';
     const meta = opts.meta || {};
+    let n = 0;
     if (opts.detect && opts.detect !== 'none') {
       Object.keys(s.boxes).forEach((vid) => {
         const fail = (defects || []).includes(vid);
@@ -234,6 +235,7 @@
         const [x, y, w, h] = s.boxes[vid];
         const col = fail ? '#ff4d4f' : '#2fbf7a';
         overlay += `<g class="det ${fail ? 'det-fail' : 'det-pass'}" data-vid="${vid}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${col}" fill-opacity=".1" stroke="${col}" stroke-width="3" ${fail ? 'stroke-dasharray="0"' : 'stroke-dasharray="9 6"'}/>`;
+        if (opts.numbers && fail) { n++; overlay += `<circle cx="${x + 6}" cy="${y + 6}" r="21" fill="#ff4d4f" stroke="#fff" stroke-width="4"/><text x="${x + 6}" y="${y + 14}" text-anchor="middle" font-size="24" font-weight="800" fill="#fff" font-family="Inter,Arial,sans-serif">${n}</text>`; }
         if (opts.labels) {
           const m = meta[vid] || {};
           const txt = (m.short || vid) + (m.conf ? '  ' + Math.round(m.conf * 100) + '%' : '');
