@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plumb — AI quality control for multi-outlet brands</title>
+<meta name="description" content="Plumb uses AI image analysis to check every outlet against your brand standards, turn violations into corrective tasks, and track who fixes them — without flying a single inspector out.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230e7c66'/%3E%3Cpath d='M16 6v12' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M16 18 L11.500 25 H20.500Z' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/landing.css">
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top"><span class="logo-mark" data-i="shield"></span>Plumb</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#product">Product</a><a href="#how">How it works</a><a href="#demo">Try the AI</a><a href="#industries">Industries</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="app.html">Sign in</a>
+      <button class="btn btn-primary" data-demo>Book a demo</button>
+    </div>
+    <button class="btn btn-ghost nav-burger" id="burger" aria-label="Menu" data-i="menu"></button>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><b>NEW</b> Re-verification: AI confirms fixes from a single photo</span>
+      <h1>Every outlet, <em>on-brand</em>, every day.</h1>
+      <p class="lead">Plumb checks the photos your outlet managers already take against your brand standards, flags violations in seconds, and chases every fix until it's done. No more flying inspectors across the country.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="app.html">Explore the live dashboard <span data-i="arrow"></span></a>
+        <button class="btn btn-lg" data-demo>Book a 20-min demo</button>
+      </div>
+      <div class="hero-proof">
+        <span data-i="check">Live in under a week</span><span data-i="check">Works with phone photos</span><span data-i="check">No hardware needed</span>
+      </div>
+    </div>
+    <div class="mock" aria-label="Product preview">
+      <div class="mock-frame">
+        <div class="mock-bar"><i></i><i></i><i></i><span>app.plumb.io / inspections / INS-4192</span></div>
+        <div class="mock-body">
+          <div class="mock-photo" id="heroPhoto"></div>
+          <div class="mock-meta">
+            <div><b>Whitefield ITPL</b><div class="muted" style="font-size:13px">Weekly self-inspection · submitted by Divya Shetty</div></div>
+            <div style="display:flex;gap:8px"><span class="badge b-bad">4 violations</span><span class="badge b-brand">4 tasks created</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="float f1"><div class="ring" data-v="64" style="--p:64"></div><div><b>Compliance score</b><span class="muted">down 11 pts this month</span></div></div>
+      <div class="float f2"><div class="ico" style="background:var(--bad-l);color:var(--bad)" data-i="alert"></div><div><b>Bin overflowing</b><span class="muted">Critical · 96% confidence</span></div></div>
+      <div class="float f3"><div class="ico" style="background:var(--good-l);color:var(--good)" data-i="check"></div><div><b>Spill on counter — resolved</b><span class="muted">Verified by AI · 2 hrs ago</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="strip">
+  <div class="wrap">
+    <p>Built for networks that can't be everywhere at once</p>
+    <div class="strip-row">
+      <span class="chip" data-i="fork">Restaurant &amp; café chains</span><span class="chip" data-i="cart">Retail franchises</span><span class="chip" data-i="scissors">Salon &amp; spa groups</span><span class="chip" data-i="book">Education centre networks</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="sec" style="padding-bottom:0">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><b>86%</b><span>fewer physical audit trips in the first 90 days</span></div>
+      <div class="stat"><b>6 sec</b><span>average time for AI to review a photo set</span></div>
+      <div class="stat"><b>3.4×</b><span>faster closure of corrective tasks</span></div>
+      <div class="stat"><b>94%</b><span>of AI findings accepted by area managers</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="sec" id="why">
+  <div class="wrap">
+    <div class="sec-h"><div class="kicker">The problem</div><h2>You can't audit 200 outlets with a team of six.</h2><p>Brand standards slip quietly. By the time a customer posts a photo of a dirty counter, it's already a headline on your Google reviews.</p></div>
+    <div class="problem reveal">
+      <div class="pcard"><h3>Without Plumb</h3><ul>
+        <li data-i="x">Area managers see each outlet once a quarter, if at all</li>
+        <li data-i="x">Checklists filled in on paper or WhatsApp, impossible to verify</li>
+        <li data-i="x">Violations found, but nobody knows whether they were ever fixed</li>
+        <li data-i="x">Same problems return every month at the same outlets</li>
+      </ul></div>
+      <div class="pcard dark"><h3>With Plumb</h3><ul>
+        <li data-i="check">Every outlet inspected weekly with photo evidence you can trust</li>
+        <li data-i="check">AI reads the photo: signage, displays, cleanliness, uniforms</li>
+        <li data-i="check">Violations become assigned tasks with deadlines automatically</li>
+        <li data-i="check">Repeat offenders and trends surface before customers notice</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sec" id="product" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h center"><div class="kicker">The product</div><h2>One loop from standard to resolution</h2><p>Headquarters defines what good looks like. Outlets prove it with photos. Plumb closes the loop.</p></div>
+    <div class="feat reveal">
+      <div class="fcard"><div class="ico" data-i="list"></div><h3>Standards &amp; checklists</h3><p>Build inspection checklists from templates or scratch. Set weights, severities and the exact photo that proves each point.</p></div>
+      <div class="fcard"><div class="ico" data-i="camera"></div><h3>Guided photo submission</h3><p>Outlet managers get a step-by-step capture flow on their phone. Blurry or off-angle photos are rejected on the spot.</p></div>
+      <div class="fcard"><div class="ico" data-i="sparkle"></div><h3>AI image analysis</h3><p>Computer vision checks branding, display arrangements, cleanliness and uniform compliance against your own reference images.</p></div>
+      <div class="fcard"><div class="ico" data-i="flag"></div><h3>Automatic corrective tasks</h3><p>Every violation becomes a task with an owner, a severity-based deadline and clear instructions. Escalates when overdue.</p></div>
+      <div class="fcard"><div class="ico" data-i="shield"></div><h3>Fix verification</h3><p>Managers upload an after-photo; the AI confirms the fix against the standard before the task is closed. No more "trust me".</p></div>
+      <div class="fcard"><div class="ico" data-i="trend"></div><h3>Outlet benchmarking</h3><p>Rank outlets, compare regions, and spot the repeated violations that point to a training or process problem.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="sec" id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h"><div class="kicker">How it works</div><h2>From checklist to closed task in four steps</h2></div>
+    <div class="steps reveal">
+      <div class="step"><h3>Set the standard</h3><p>HQ publishes a checklist with reference images for what "right" looks like at each outlet.</p></div>
+      <div class="step"><h3>Outlets submit photos</h3><p>Managers capture 4 to 6 guided photos in about 15 minutes, weekly or on a surprise request.</p></div>
+      <div class="step"><h3>AI flags violations</h3><p>Findings come back in seconds with bounding boxes, confidence and the standard each one breaks.</p></div>
+      <div class="step"><h3>Fix, verify, learn</h3><p>Tasks are tracked to closure, re-verified by AI, and fed into performance and repeat-violation reports.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="sec" id="demo" style="padding-top:0">
+  <div class="wrap">
+    <div class="demo reveal">
+      <div>
+        <div class="demo-tabs" id="demoTabs"></div>
+        <div class="demo-photo" id="demoPhoto"><div class="scan" id="scan"></div></div>
+      </div>
+      <div class="demo-side">
+        <div class="kicker" style="color:#6ee7b7">Try it yourself</div>
+        <h2 style="font-size:30px;margin-bottom:12px">Watch the AI inspect an outlet photo</h2>
+        <p style="color:#9db3aa;margin-bottom:6px">Pick a photo and run the analysis. This is the same detection view your area managers see.</p>
+        <div class="finding-list" id="findings"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" id="runDemo" data-i="sparkle">Analyse photo</button><a class="btn" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.25)" href="app.html#/inspections">See full inspections</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section class="sec" id="industries" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h"><div class="kicker">Industries</div><h2>Your standards, in your language</h2><p>Start from a proven template for your sector, then make it yours.</p></div>
+    <div class="ind reveal">
+      <div class="ind-tabs" id="indTabs"></div>
+      <div class="ind-panel" id="indPanel"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="sec" id="pricing" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h center"><div class="kicker">Pricing</div><h2>Priced per outlet. Grows with your network.</h2><p>Every plan includes unlimited users and photo analyses. Add outlets any time, billed pro rata.</p></div>
+    <div class="price-top"><div class="seg" id="billSeg"><button class="on" data-b="m">Monthly</button><button data-b="y">Annual <small>save 20%</small></button></div></div>
+    <div class="plans reveal" id="plans"></div>
+    <div class="calc reveal">
+      <div><h4>Estimate your monthly cost</h4><div class="muted">Slide to the number of outlets in your network</div><input type="range" id="outletRange" min="3" max="200" value="18" aria-label="Number of outlets"><div class="ticks"><span>3</span><span>50</span><span>100</span><span>150</span><span>200</span></div></div>
+      <div class="tot"><b id="calcTotal">₹0</b><span id="calcNote"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTES -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h center"><div class="kicker">Customers</div><h2>Operations teams get their weekends back</h2></div>
+    <div class="quotes reveal">
+      <div class="quote"><span class="res" data-i="trend">Audit trips cut by 80%</span><p>"We used to send two regional auditors to every city every quarter. Now they only travel when Plumb flags a real problem. Compliance went up, travel costs went down."</p><div class="who"><div class="av" style="background:#0e7c66">AN</div><div><b>Anita Nair</b><small>VP Operations, 140-outlet café chain</small></div></div></div>
+      <div class="quote"><span class="res" data-i="clock">Fix time: 9 days → 2.6</span><p>"The re-verification is the killer feature. A manager can't tick 'done' without the after-photo passing. Our franchisees noticed the difference within a month."</p><div class="who"><div class="av" style="background:#2f7de1">RV</div><div><b>Rahul Verma</b><small>Head of Franchise Quality, retail group</small></div></div></div>
+      <div class="quote"><span class="res" data-i="repeat">Repeat violations −61%</span><p>"The repeat-offender view showed us that three salons kept failing the same towel-station check. It wasn't discipline, it was a missing storage unit. We fixed it in a day."</p><div class="who"><div class="av" style="background:#cf7b0f">SM</div><div><b>Sneha Menon</b><small>Operations Lead, 62-salon network</small></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h center"><div class="kicker">FAQ</div><h2>Questions we get asked a lot</h2></div>
+    <div class="faq reveal">
+      <details open><summary>How accurate is the AI image analysis? <span data-i="chevdown"></span></summary><p>Plumb is tuned on your own reference photos, so it learns what "correct" looks like for your brand. Every finding carries a confidence score; low-confidence items are routed to a human reviewer instead of being auto-flagged, and reviewers' decisions improve your model over time.</p></details>
+      <details><summary>Can outlet managers cheat by submitting old or staged photos? <span data-i="chevdown"></span></summary><p>Photos are captured in-app with timestamp and location checks, and Plumb detects duplicates and re-used images. Random "spot-check" requests ask for a fresh photo within 30 minutes.</p></details>
+      <details><summary>What do outlet teams need to get started? <span data-i="chevdown"></span></summary><p>A smartphone. Managers sign in with their phone number, follow the guided capture flow, and get notified of tasks on WhatsApp or push. No hardware, cameras or installation.</p></details>
+      <details><summary>How does pricing work? <span data-i="chevdown"></span></summary><p>A flat monthly fee per active outlet, with volume tiers. Users, standards, photo analyses and tasks are unlimited. Outlets added mid-month are billed pro rata.</p></details>
+      <details><summary>Can we use our existing checklists and brand guidelines? <span data-i="chevdown"></span></summary><p>Yes. Upload your current checklists and brand guideline PDFs and our onboarding team will convert them into AI-checkable standards, usually within three working days.</p></details>
+      <details><summary>Is our data secure? <span data-i="chevdown"></span></summary><p>Data is encrypted in transit and at rest, hosted in India (Mumbai region), and never used to train models for other customers. SSO, audit logs and role-based access are included on Growth and above.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0;padding-bottom:0">
+  <div class="wrap"><div class="cta reveal"><h2>See your whole network the way a customer does.</h2><p>Book a 20-minute walkthrough with your own checklist, or jump into the live dashboard and look around.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="btn btn-primary btn-lg" data-demo>Book a demo</button><a class="btn btn-lg" href="app.html">Open live dashboard</a></div></div></div>
+</section>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <div class="foot-grid">
+    <div><a class="logo" href="#top" style="padding:0"><span class="logo-mark" data-i="shield"></span>Plumb</a><p class="muted" style="margin-top:14px;max-width:300px">AI quality control for restaurant, retail, salon and education networks.</p></div>
+    <div><h5>Product</h5><a href="#product">Features</a><a href="#demo">AI demo</a><a href="#pricing">Pricing</a><a href="app.html">Live dashboard</a></div>
+    <div><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Customers</a><a href="#">Contact</a></div>
+    <div><h5>Resources</h5><a href="#faq">FAQ</a><a href="#">Security</a><a href="#">Help centre</a><a href="#">Status</a></div>
+  </div>
+  <div class="foot-bot"><span>© 2026 Plumb Technologies Pvt. Ltd. · Bengaluru</span><span>Privacy · Terms · DPA</span></div>
+</div></footer>
+
+<div class="toasts" id="toasts"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/scenes.js"></script>
+<script src="assets/js/landing.js"></script>
+</body>
+</html>

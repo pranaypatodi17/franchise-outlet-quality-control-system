@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — Plumb</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230e7c66'/%3E%3Cpath d='M16 6v12' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M16 18 L11.500 25 H20.500Z' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/landing.css">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body class="app">
+<div class="shell">
+  <aside class="side" id="side">
+    <a class="logo" href="index.html"><span class="logo-mark" data-i="shield"></span>Plumb</a>
+    <div class="side-co"><div class="co-av">K&amp;C</div><div><b>Kettle &amp; Co.</b><span>18 outlets · 4 regions</span></div></div>
+    <nav id="nav" aria-label="App"></nav>
+    <div class="side-foot"><b>Growth plan</b>18 of 50 outlets active<div class="meter"><i style="width:36%"></i></div><a href="#/billing" style="color:#6ee7b7;font-weight:600">Manage billing →</a></div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="main">
+    <header class="top">
+      <button class="iconbtn burger" id="burger" aria-label="Menu" data-i="menu"></button>
+      <div class="search"><span data-i="search"></span><input class="input" id="q" placeholder="Search outlets, tasks, inspections…" autocomplete="off"><kbd class="hide-s">/</kbd><div class="results" id="results" hidden></div></div>
+      <div class="sp"></div>
+      <a class="btn btn-primary hide-s" href="#/new" data-i="camera">New inspection</a>
+      <div style="position:relative"><button class="iconbtn" id="bell" aria-label="Notifications"><span data-i="bell"></span><i class="dot"></i></button><div class="pop" id="notif" hidden></div></div>
+      <div class="me"><div class="avatar">RK</div><span style="line-height:1.2"><b style="font-size:13.500px;display:block">Rhea Kapoor</b><small class="muted">Head of Retail Ops</small></span></div>
+    </header>
+    <main id="view"></main>
+  </div>
+</div>
+<div class="toasts" id="toasts"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/scenes.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
