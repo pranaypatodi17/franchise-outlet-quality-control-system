@@ -19,7 +19,7 @@
     menu_old: { short: 'Menu prices outdated', conf: 0.91 }, cups_off: { short: 'Cup stacks misaligned', conf: 0.88 },
     no_apron: { short: 'Apron not worn', conf: 0.93 }, pastry_off: { short: 'Off-planogram', conf: 0.87 },
   };
-  $('#heroPhoto').innerHTML = Scenes.render('counter', ['spill', 'bin_overflow', 'cups_off', 'no_apron'], { detect: 'fails', labels: true, meta: META });
+  $('#heroPhoto').innerHTML = Scenes.render('counter', ['spill', 'bin_overflow'], { detect: 'fails', numbers: true });
 
   /* interactive demo */
   const DEMOS = {

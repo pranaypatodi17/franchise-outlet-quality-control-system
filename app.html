@@ -15,7 +15,7 @@
 <div class="shell">
   <aside class="side" id="side">
     <a class="logo" href="index.html"><span class="logo-mark" data-i="shield"></span>Plumb</a>
-    <div class="side-co"><div class="co-av">K&amp;C</div><div><b>Kettle &amp; Co.</b><span>18 outlets · 4 regions</span></div></div>
+    <div class="side-co"><div class="co-av">K&amp;C</div><div><b>Kettle &amp; Co.</b><span id="coSub">18 outlets · 4 regions</span></div></div>
     <nav id="nav" aria-label="App"></nav>
     <div class="side-foot"><b>Growth plan</b>18 of 50 outlets active<div class="meter"><i style="width:36%"></i></div><a href="#/billing" style="color:#6ee7b7;font-weight:600">Manage billing →</a></div>
   </aside>
@@ -25,9 +25,10 @@
       <button class="iconbtn burger" id="burger" aria-label="Menu" data-i="menu"></button>
       <div class="search"><span data-i="search"></span><input class="input" id="q" placeholder="Search outlets, tasks, inspections…" autocomplete="off"><kbd class="hide-s">/</kbd><div class="results" id="results" hidden></div></div>
       <div class="sp"></div>
+      <div class="seg" id="roleSw" role="group" aria-label="View as"><button data-r="owner">Outlet owner</button><button data-r="hq">Head office</button></div>
       <a class="btn btn-primary hide-s" href="#/new" data-i="camera">New inspection</a>
       <div style="position:relative"><button class="iconbtn" id="bell" aria-label="Notifications"><span data-i="bell"></span><i class="dot"></i></button><div class="pop" id="notif" hidden></div></div>
-      <div class="me"><div class="avatar">RK</div><span style="line-height:1.2"><b style="font-size:13.500px;display:block">Rhea Kapoor</b><small class="muted">Head of Retail Ops</small></span></div>
+      <div class="me" id="me"></div>
     </header>
     <main id="view"></main>
   </div>

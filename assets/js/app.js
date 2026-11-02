@@ -114,9 +114,29 @@
     return Scenes.render(scene, defects, { detect: defects.includes(vid) ? 'fails' : 'all', labels: false }).replace('viewBox="0 0 800 500"', `viewBox="${x} ${y} ${w} ${h}"`);
   };
 
+  /* ---------- role: outlet owner (simple) vs head office (analytics) ---------- */
+  const ME = { outlet: 'bom-pw', name: 'Neha Kulkarni' };
+  let ROLE = store.get('role', 'owner');
+  const isOwner = () => ROLE === 'owner';
+  const grade = (sc) => (sc >= 90 ? { k: 'g', w: 'Excellent', h: 'Your outlet is looking great', i: 'check' } : sc >= 80 ? { k: 'g', w: 'Good', h: 'Your outlet is in good shape', i: 'check' } : sc >= 70 ? { k: 'y', w: 'Needs work', h: 'A few things need your attention', i: 'alert' } : { k: 'r', w: 'Urgent', h: 'Your outlet needs help this week', i: 'alert' });
+  const priLab = (sev) => ({ critical: ['u', 'Urgent'], major: ['i', 'Important'], minor: ['q', 'Quick fix'] }[sev]);
+  function renderTop() {
+    document.body.dataset.role = ROLE;
+    $$('#roleSw button').forEach((b) => b.classList.toggle('on', b.dataset.r === ROLE));
+    const o = Q.OUT[ME.outlet];
+    $('#me').innerHTML = isOwner() ? `${av(ME.name, 34)}<span style="line-height:1.2"><b style="font-size:13.5px;display:block">${ME.name}</b><small class="muted">Manager · ${o.name.split(' ')[0]}</small></span>` : `<div class="avatar">RK</div><span style="line-height:1.2"><b style="font-size:13.5px;display:block">Rhea Kapoor</b><small class="muted">Head of Retail Ops</small></span>`;
+    $('#coSub').textContent = isOwner() ? o.name : '18 outlets · 4 regions';
+  }
+  $$('#roleSw button').forEach((b) => (b.onclick = () => { ROLE = b.dataset.r; store.set('role', ROLE); location.hash = isOwner() ? '#/home' : '#/overview'; render(); }));
+
   /* ---------- shell ---------- */
   const NAV = [['overview', 'grid', 'Overview'], ['inspections', 'camera', 'Inspections'], ['tasks', 'tasks', 'Corrective tasks'], ['outlets', 'store', 'Outlets'], ['standards', 'list', 'Standards']];
   function renderNav(route) {
+    if (isOwner()) {
+      const mine = Q.TASKS.filter((t) => t.outlet === ME.outlet && t.status !== 'resolved').length;
+      $('#nav').innerHTML = `<div class="nav-sec">My outlet</div>` + [['home', 'grid', 'Home'], ['todo', 'tasks', 'Things to fix'], ['new', 'camera', 'Start weekly check'], ['inspections', 'list', 'Past checks']].map(([id, i, l]) => `<a href="#/${id}" class="${route === id ? 'on' : ''}">${ic(i)}${l}${id === 'todo' && mine ? `<span class="n hot">${mine}</span>` : ''}</a>`).join('');
+      return;
+    }
     const open = Q.TASKS.filter((t) => t.status !== 'resolved').length, od = Q.TASKS.filter((t) => tstate(t) === 'overdue').length;
     $('#nav').innerHTML = `<div class="nav-sec">Workspace</div>` + NAV.map(([id, i, l]) => `<a href="#/${id}" class="${route === id ? 'on' : ''}">${ic(i)}${l}${id === 'tasks' ? `<span class="n ${od ? 'hot' : ''}">${open}</span>` : ''}</a>`).join('') +
       `<div class="nav-sec">Account</div><a href="#/new" class="${route === 'new' ? 'on' : ''}">${ic('plus')}New inspection</a><a href="#/billing" class="${route === 'billing' ? 'on' : ''}">${ic('card')}Plan &amp; billing</a>`;
@@ -195,11 +215,45 @@
       </div></div>`;
   };
 
+  /* OWNER: HOME + TO-DO (plain language, no analytics) */
+  const todoRow = (t) => { const v = Q.VIOL[t.vid], p = priLab(t.sev), late = tstate(t) === 'overdue'; return `<div class="todo"><span class="pri ${p[0]}">${p[1]}</span><div><b>${v.short}</b><p>${t.title}</p><div class="when">${t.status === 'review' ? 'Photo sent — waiting for head office to check' : late ? `<span class="down" style="font-weight:700">Late by ${Math.ceil((NOW - t.due) / Q.DAY)} day(s)</span>` : 'Fix by ' + dShort(t.due)}${t.recur > 2 ? ' · keeps coming back' : ''}</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">${t.status === 'review' ? '<span class="badge b-brand">With head office</span>' : `<button class="btn btn-primary btn-sm" data-fix="${t.id}">${ic('camera')}I fixed it</button>`}<button class="btn btn-sm" data-task="${t.id}">Details</button></div></div>`; };
+  const wireTodo = () => { $$('[data-fix]').forEach((b) => (b.onclick = () => { const t = Q.TASKS.find((x) => x.id === b.dataset.fix); fixModal(t, render); })); $$('[data-task]').forEach((b) => (b.onclick = () => taskDrawer(b.dataset.task))); };
+  views.home = () => {
+    const o = Q.OUT[ME.outlet], last = Q.latestIns(o.id), g = grade(last.score);
+    const my = Q.TASKS.filter((t) => t.outlet === o.id && t.status !== 'resolved').sort((a, b) => SEVORD[a.sev] - SEVORD[b.sev] || a.due - b.due);
+    const fix = my.filter((t) => t.status !== 'review'), late = my.filter((t) => tstate(t) === 'overdue');
+    const done = Q.TASKS.filter((t) => t.outlet === o.id && t.status === 'resolved' && t.resolved && (NOW - t.resolved) / Q.DAY <= 30).sort((a, b) => b.resolved - a.resolved);
+    const rank = [...Q.OUTLETS].sort((a, b) => outletScore(b.id) - outletScore(a.id)).findIndex((x) => x.id === o.id) + 1;
+    const ser = Q.series(o.id), dlt = ser[ser.length - 1] - avg(ser.slice(-5, -1));
+    const trend = dlt > 2 ? ['Getting better', 'Nice work — you are doing better than last month.'] : dlt < -2 ? ['Slipping a little', 'Your standards dropped compared with last month.'] : ['Steady', 'About the same as last month.'];
+    const rep = Q.repeats(o.id, 4)[0];
+    const dueIn = Math.ceil((new Date(last.date.getTime() + 7 * Q.DAY) - NOW) / Q.DAY);
+    const nextTxt = dueIn < 0 ? `Your weekly check is ${-dueIn} day${dueIn < -1 ? 's' : ''} late` : dueIn === 0 ? 'Your weekly check is due today' : `Your next weekly check is due in ${dueIn} day${dueIn > 1 ? 's' : ''}`;
+    const hr = new Date().getHours(), greet = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+    return `<div class="page owner"><div class="ph"><div><h1>${greet}, ${ME.name.split(' ')[0]}</h1><p>Here's what to do at ${o.name} today.</p></div></div>
+    <div class="grid g21"><div class="card ohero"><div class="face ${g.k}">${ic(g.i)}</div><div><h2>${g.h}</h2><p>${fix.length ? `Your last photo check found <b>${fix.length} thing${fix.length > 1 ? 's' : ''} to fix</b>. Fix them to keep your outlet looking its best.` : 'Everything from your last check is sorted. Keep it up!'}</p><div class="chips"><span class="badge ${g.k === 'g' ? 'b-good' : g.k === 'y' ? 'b-warn' : 'b-bad'}">Rating: ${g.w}</span>${late.length ? `<span class="badge b-bad">${late.length} late</span>` : '<span class="badge b-good">Nothing late</span>'}</div></div></div>
+    <div class="next"><div><h3>${nextTxt}</h3><p>Take 4 photos on your phone — counter, front, seating, and back. Takes about 12 minutes.</p></div><a class="btn btn-primary btn-lg" href="#/new">${ic('camera')}Start weekly check</a></div></div>
+    <div class="card mt"><div class="card-h"><h3>Fix these first<span class="sub">Start at the top. Tap “I fixed it” and add a photo when done.</span></h3>${fix.length > 4 ? `<a class="link" href="#/todo">See all ${fix.length} ${ic('chevron')}</a>` : ''}</div><div style="margin-top:10px">${fix.slice(0, 4).map(todoRow).join('') || `<div class="empty">${ic('check')}Nothing to fix right now.</div>`}</div></div>
+    <div class="tiles mt"><div class="card tile"><small>Compared with other outlets</small><b>${rank}${['th', 'st', 'nd', 'rd'][rank % 10 > 3 || ((rank % 100) / 10 | 0) === 1 ? 0 : rank % 10]} out of 18</b><p>${rank <= 6 ? 'You are in the top group.' : rank <= 12 ? 'You are in the middle. A few fixes will move you up.' : 'There is room to improve. Start with the urgent items.'}</p></div>
+    <div class="card tile"><small>Compared with last month</small><b>${trend[0]}</b><p>${trend[1]}</p></div>
+    <div class="card tile"><small>${rep ? 'Keeps coming back' : 'Repeat problems'}</small><b>${rep ? Q.VIOL[rep.vid].short : 'None'}</b><p>${rep ? 'Tip: ' + Q.VIOL[rep.vid].task + '.' : 'No problem has repeated in the last 3 months.'}</p></div></div>
+    <div class="card mt"><div class="card-h"><h3>Fixed recently</h3></div><div style="margin-top:8px">${done.slice(0, 5).map((t) => `<div class="done-row">${ic('check')}<span>${Q.VIOL[t.vid].short}</span><small>${ago(t.resolved)}</small></div>`).join('') || '<div class="empty" style="padding:24px">Fixes you complete will show up here.</div>'}</div></div></div>`;
+  };
+  views.home.after = wireTodo;
+  views.todo = () => {
+    const mine = Q.TASKS.filter((t) => t.outlet === ME.outlet).sort((a, b) => SEVORD[a.sev] - SEVORD[b.sev] || a.due - b.due);
+    const todo = mine.filter((t) => t.status !== 'resolved'), done = mine.filter((t) => t.status === 'resolved' && t.resolved).sort((a, b) => b.resolved - a.resolved).slice(0, 8);
+    return `<div class="page owner"><div class="ph"><div><h1>Things to fix</h1><p>Everything that came up in your photo checks. Fix it, add a photo, and it's done.</p></div></div>
+    <div class="card"><div class="card-h"><h3>To do (${todo.length})</h3></div><div style="margin-top:10px">${todo.map(todoRow).join('') || `<div class="empty">${ic('check')}You're all caught up.</div>`}</div></div>
+    <div class="card mt"><div class="card-h"><h3>Done</h3></div><div style="margin-top:8px">${done.map((t) => `<div class="done-row">${ic('check')}<span>${Q.VIOL[t.vid].short}</span><small>${ago(t.resolved)}</small></div>`).join('')}</div></div></div>`;
+  };
+  views.todo.after = (id) => { wireTodo(); if (id) taskDrawer(id); };
+
   /* INSPECTIONS list */
   const insF = { q: '', region: 'all', status: 'all', n: 20 };
   views.inspections = () => {
-    const rows = Q.INSPECTIONS.filter((i) => (insF.region === 'all' || Q.OUT[i.outlet].region === insF.region) && (insF.status === 'all' || (insF.status === 'viol' ? i.fails.some((f) => Q.VIOL[f].sev === 'critical') : insF.status === 'low' ? i.score < 80 : i.score >= 85)) && (Q.OUT[i.outlet].name + i.id + Q.OUT[i.outlet].city).toLowerCase().includes(insF.q.toLowerCase()));
-    return `<div class="page"><div class="ph"><div><h1>Inspections</h1><p>Every submission, reviewed by AI against your standards.</p></div><div class="acts"><a class="btn btn-primary" href="#/new" data-i="camera">New inspection</a></div></div>
+    const rows = Q.INSPECTIONS.filter((i) => (!isOwner() || i.outlet === ME.outlet) && (insF.region === 'all' || Q.OUT[i.outlet].region === insF.region) && (insF.status === 'all' || (insF.status === 'viol' ? i.fails.some((f) => Q.VIOL[f].sev === 'critical') : insF.status === 'low' ? i.score < 80 : i.score >= 85)) && (Q.OUT[i.outlet].name + i.id + Q.OUT[i.outlet].city).toLowerCase().includes(insF.q.toLowerCase()));
+    return `<div class="page"><div class="ph"><div><h1>${isOwner() ? 'Past checks' : 'Inspections'}</h1><p>${isOwner() ? 'Every photo check you have sent, and what was found.' : 'Every submission, reviewed by AI against your standards.'}</p></div><div class="acts"><a class="btn btn-primary" href="#/new" data-i="camera">New inspection</a></div></div>
     <div class="card"><div class="toolbar"><input class="input grow" id="fq" placeholder="Filter by outlet, city or ID…" value="${esc(insF.q)}"><select class="select" id="fr"><option value="all">All regions</option>${['South', 'West', 'North'].map((r) => `<option ${insF.region === r ? 'selected' : ''}>${r}</option>`).join('')}</select>
       <div class="pills" id="fs">${[['all', 'All'], ['viol', 'Has critical'], ['low', 'Below 80'], ['top', '85+']].map(([k, l]) => `<button data-k="${k}" class="${insF.status === k ? 'on' : ''}">${l}</button>`).join('')}</div><span class="muted" style="margin-left:auto;font-size:13px">${rows.length} results</span></div>
     <div class="tw"><table class="t"><thead><tr><th>Inspection</th><th>Outlet</th><th>Photos</th><th>Submitted</th><th>Violations</th><th>Score</th><th></th></tr></thead><tbody>${rows.slice(0, insF.n).map((i) => `<tr class="click" data-go="#/inspections/${i.id}"><td><b>${i.id}</b><div class="sm muted" style="font-size:12.5px">${i.type}</div></td><td><div class="who">${av(Q.OUT[i.outlet].manager, 30)}<div><b>${Q.OUT[i.outlet].name}</b><small>${Q.OUT[i.outlet].city} · ${Q.OUT[i.outlet].manager}</small></div></div></td><td><div class="thumbs">${i.photos.map((p) => `<div>${photoCard(p.scene, p.defects, {})}</div>`).join('')}</div></td><td>${dShort(i.date)}<div class="muted" style="font-size:12.5px">${tShort(i.date)}</div></td><td>${i.fails.length ? `<span class="badge b-bad plain">${i.fails.length} found</span>${i.fails.some((f) => Q.VIOL[f].sev === 'critical') ? ' <span class="badge b-crit plain">critical</span>' : ''}` : '<span class="badge b-good plain">None</span>'}</td><td><span class="sc ${scCls(i.score)}">${i.score}</span></td><td>${ic('chevron')}</td></tr>`).join('')}</tbody></table></div>
@@ -247,10 +301,11 @@
   const W = { step: 1, outlet: '', list: 'Weekly Outlet Standard v3.2', slots: {}, result: null };
   const SLOTLAB = { storefront: ['Storefront & signage', 'Stand across the street; capture the full fascia, windows and entrance'], counter: ['Service counter', 'Capture the counter, menu board, pastry case and bin in one frame'], dining: ['Dining floor', 'Capture seating area, floor and the fire-safety corner'], back: ['Back of house', 'Capture the hand-wash station, notice board and a staff member'] };
   views.new = () => {
+    if (isOwner() && !W.outlet) { W.outlet = ME.outlet; W.step = 2; }
     const st = (n, l) => `<div class="${W.step === n ? 'on' : W.step > n ? 'done' : ''}"><b>${W.step > n ? '✓' : n}</b><span>${l}</span></div>`;
     let body = '';
     if (W.step === 1) {
-      body = `<div class="card"><div class="card-b" style="display:grid;gap:18px;max-width:640px"><label class="f">Outlet<select class="select" id="wo"><option value="">Select an outlet…</option>${Q.OUTLETS.map((o) => `<option value="${o.id}" ${W.outlet === o.id ? 'selected' : ''}>${o.name} — ${o.city}</option>`).join('')}</select></label>
+      body = `<div class="card"><div class="card-b" style="display:grid;gap:18px;max-width:640px"><label class="f">Outlet<select class="select" id="wo" ${isOwner() ? 'disabled' : ''}><option value="">Select an outlet…</option>${Q.OUTLETS.map((o) => `<option value="${o.id}" ${W.outlet === o.id ? 'selected' : ''}>${o.name} — ${o.city}</option>`).join('')}</select></label>
       <label class="f">Checklist<select class="select" id="wl"><option>Weekly Outlet Standard v3.2</option><option>Opening Checklist v2.0</option><option>Festive Campaign — Oct–Nov</option></select></label>
       <div class="hint">${ic('camera')}<span>You'll capture <b>4 guided photos</b>. Plumb checks each photo for blur, lighting and angle before analysing it. Takes about 12 minutes.</span></div>
       <div><button class="btn btn-primary" id="w1" ${W.outlet ? '' : 'disabled'}>Continue ${ic('arrow')}</button></div></div></div>`;
@@ -291,7 +346,7 @@
       const r = W.result, id = 'INS-' + (4400 + Q.INSPECTIONS.length);
       const ins = { id, outlet: W.outlet, date: new Date(), week: 0, type: 'Weekly self-inspection', by: Q.OUT[W.outlet].manager, score: r.score, catScore: r.cs, fails: r.fails, photos: Scenes.keys.map((k) => ({ scene: k, defects: W.slots[k].defects })), checks: 40, duration: 12 };
       addInspection(ins); const saved = store.get('newins', []); saved.push({ ...ins, photos: undefined }); store.set('newins', saved);
-      W.step = 1; W.slots = {}; W.result = null; toast(`Inspection ${id} submitted — ${r.fails.length} corrective task${r.fails.length === 1 ? '' : 's'} created`); location.hash = '#/inspections/' + id;
+      W.step = 1; W.outlet = ''; W.slots = {}; W.result = null; toast(`Inspection ${id} submitted — ${r.fails.length} corrective task${r.fails.length === 1 ? '' : 's'} created`); location.hash = '#/inspections/' + id;
     };
   };
 
@@ -329,7 +384,7 @@
     ${t.recur > 1 ? `<div class="hint" style="background:#f3e8fd;color:#5b2587">${ic('repeat')}<span>This violation has been flagged in <b>${t.recur} consecutive inspections</b>. Consider a root-cause review with ${o.manager}.</span></div>` : ''}
     <div><h4 style="font-size:14px;margin-bottom:12px">Activity</h4><div class="tl">${[...t.events].sort((a, b) => a.at - b.at).map((e) => `<div>${e.text}<small>${dShort(e.at)}, ${tShort(e.at)}</small></div>`).join('')}</div></div></div>
     <div class="drawer-f">${acts || `<span class="badge b-good" style="margin-right:auto">Verified closed</span><button class="btn" data-x>Close</button>`}</div>`);
-    hydrateIcons(d); history.replaceState(null, '', '#/tasks/' + id);
+    hydrateIcons(d); if (location.hash.startsWith('#/tasks')) history.replaceState(null, '', '#/tasks/' + id);
     const refresh = () => { closeDrawer(); render(); taskDrawer(id); };
     const s = $('#dStart', d); if (s) s.onclick = () => { t.status = 'progress'; addEvent(t, t.assignee + ' started work'); toast('Task marked in progress'); refresh(); };
     const f = $('#dFix', d); if (f) f.onclick = () => fixModal(t, refresh);
@@ -443,7 +498,7 @@
 
   /* ---------- router ---------- */
   let lastKey = '';
-  function parse() { const h = location.hash.replace(/^#\/?/, '') || 'overview'; const [r, id] = h.split('/'); return { r, id }; }
+  function parse() { const h = location.hash.replace(/^#\/?/, '') || (isOwner() ? 'home' : 'overview'); const [r, id] = h.split('/'); return { r, id }; }
   function render() {
     const { r, id } = parse(); let key = r, html, after;
     if (r === 'inspections' && id) { html = views.inspection(id); after = views.inspection.after; key = 'inspections'; }
@@ -451,16 +506,16 @@
     else if (views[r] && r !== 'inspection' && r !== 'outlet') { html = views[r](id); after = views[r].after && (() => views[r].after(id)); }
     else { html = notFound(); }
     const sy = scrollY, same = lastKey === location.hash.split('/').slice(0, 2).join('/');
-    view.innerHTML = html; hydrateIcons(view); wireCharts(view); renderNav(key);
+    view.innerHTML = html; hydrateIcons(view); wireCharts(view); renderNav(key); renderTop();
     $$('[data-go]', view).forEach((e) => (e.onclick = (ev) => { if (!ev.target.closest('a,button,input,label')) location.hash = e.dataset.go; }));
     $$('.bar .tr i', view).forEach((i) => { const w = i.style.width; i.style.width = 0; requestAnimationFrame(() => requestAnimationFrame(() => (i.style.width = w))); });
     if (after) after();
     const ex = $('#exportBtn'); if (ex) ex.onclick = () => toast('Network report exported as PDF (12 pages)');
-    document.title = { overview: 'Overview', inspections: 'Inspections', tasks: 'Corrective tasks', outlets: 'Outlets', standards: 'Standards', new: 'New inspection', billing: 'Billing' }[key] + ' — Plumb';
+    document.title = { home: 'Home', todo: 'Things to fix', overview: 'Overview', inspections: 'Inspections', tasks: 'Corrective tasks', outlets: 'Outlets', standards: 'Standards', new: 'New inspection', billing: 'Billing' }[key] + ' — Plumb';
     if (!same) scrollTo(0, 0); else scrollTo(0, sy);
     lastKey = location.hash.split('/').slice(0, 2).join('/');
     $('#side').classList.remove('open'); $('#scrim').classList.remove('show');
   }
-  addEventListener('hashchange', () => { const { r, id } = parse(); if (r === 'tasks' && id && lastKey.startsWith('#/tasks')) { taskDrawer(id); return; } closeDrawer(); render(); });
+  addEventListener('hashchange', () => { const { r, id } = parse(); if ((r === 'tasks' || r === 'todo') && id && lastKey.startsWith('#/' + r)) { taskDrawer(id); return; } closeDrawer(); render(); });
   render();
 })();
