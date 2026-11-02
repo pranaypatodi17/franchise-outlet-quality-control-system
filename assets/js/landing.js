@@ -19,14 +19,14 @@
     menu_old: { short: 'Menu prices outdated', conf: 0.91 }, cups_off: { short: 'Cup stacks misaligned', conf: 0.88 },
     no_apron: { short: 'Apron not worn', conf: 0.93 }, pastry_off: { short: 'Off-planogram', conf: 0.87 },
   };
-  $('#heroPhoto').innerHTML = Scenes.render('counter', ['spill', 'bin_overflow'], { detect: 'fails', numbers: true });
+  $('#heroPhoto').innerHTML = Scenes.render('counter', ['spill', 'cups_off'], { detect: 'fails', numbers: true });
 
   /* interactive demo */
   const DEMOS = {
-    storefront: { defects: ['sign_unlit', 'promo_old', 'logo_blocked'], f: [['sign_unlit', 'Fascia sign partly unlit', 'Branding · Major', 94], ['promo_old', 'Expired promo poster', 'Branding · Minor', 89], ['logo_blocked', 'Brand plaque obstructed', 'Branding · Minor', 91]] },
-    counter: { defects: ['spill', 'bin_overflow', 'cups_off', 'no_apron'], f: [['bin_overflow', 'Bin overflowing', 'Cleanliness · Critical', 96], ['spill', 'Spill on counter', 'Cleanliness · Major', 94], ['no_apron', 'Apron not worn', 'Staff · Minor', 93], ['cups_off', 'Cup stacks misaligned', 'Display · Minor', 88]] },
-    dining: { defects: ['extinguisher_blocked', 'tables_unwiped', 'floor_debris', 'seasonal_missing'], f: [['extinguisher_blocked', 'Extinguisher blocked', 'Safety · Critical', 97], ['seasonal_missing', 'Seasonal display missing', 'Display · Major', 90], ['tables_unwiped', 'Tables not wiped', 'Cleanliness · Minor', 86], ['floor_debris', 'Debris on floor', 'Cleanliness · Minor', 84]] },
-    back: { defects: ['handwash_nosoap', 'pest_log'], f: [['handwash_nosoap', 'Hand-wash soap empty', 'Cleanliness · Critical', 95], ['pest_log', 'Pest-control log missing', 'Safety · Major', 92]] },
+    storefront: { defects: ['sign_unlit', 'promo_old', 'logo_blocked'], f: [['sign_unlit', 'Hanging sign not lit', 'Branding · Major', 94], ['logo_blocked', 'Walkway board blocks the shopfront', 'Branding · Minor', 91], ['promo_old', 'Expired promo notice', 'Branding · Minor', 89]] },
+    counter: { defects: ['menu_old', 'spill', 'cups_off', 'pastry_off'], f: [['spill', 'Spill on counter', 'Cleanliness · Major', 94], ['menu_old', 'Menu board out of date', 'Branding · Major', 91], ['cups_off', 'Shelf stock misaligned', 'Display · Minor', 88], ['pastry_off', 'Display off-planogram', 'Display · Minor', 86]] },
+    dining: { defects: ['bin_overflow', 'handwash_nosoap', 'tables_unwiped', 'floor_debris'], f: [['bin_overflow', 'Bin overflowing', 'Cleanliness · Critical', 96], ['handwash_nosoap', 'Hand-wash soap empty', 'Cleanliness · Critical', 92], ['tables_unwiped', 'Table not wiped', 'Cleanliness · Minor', 86], ['floor_debris', 'Debris on floor', 'Cleanliness · Minor', 84]] },
+    back: { defects: ['no_apron', 'uniform_stained'], f: [['no_apron', 'Apron not worn', 'Staff · Minor', 95], ['uniform_stained', 'Uniform not presentable', 'Staff · Minor', 82]] },
   };
   const DM = {};
   Object.values(DEMOS).forEach((d) => d.f.forEach((f) => (DM[f[0]] = { short: f[1], conf: f[3] / 100 })));
