@@ -299,7 +299,7 @@
 
   /* NEW INSPECTION wizard */
   const W = { step: 1, outlet: '', list: 'Weekly Outlet Standard v3.2', slots: {}, result: null };
-  const SLOTLAB = { storefront: ['Storefront & signage', 'Stand across the street; capture the full fascia, windows and entrance'], counter: ['Service counter', 'Capture the counter, menu board, pastry case and bin in one frame'], dining: ['Dining floor', 'Capture seating area, floor and the fire-safety corner'], back: ['Back of house', 'Capture the hand-wash station, notice board and a staff member'] };
+  const SLOTLAB = { storefront: ['Storefront & signage', 'Stand across the street; capture the full fascia, windows and entrance'], counter: ['Service counter', 'Capture the counter, menu board, pastry case and bin in one frame'], dining: ['Dining floor', 'Capture seating, floor, bin and the hand-wash station'], back: ['Staff & billing', 'Capture the billing desk with a staff member in uniform'] };
   views.new = () => {
     if (isOwner() && !W.outlet) { W.outlet = ME.outlet; W.step = 2; }
     const st = (n, l) => `<div class="${W.step === n ? 'on' : W.step > n ? 'done' : ''}"><b>${W.step > n ? '✓' : n}</b><span>${l}</span></div>`;

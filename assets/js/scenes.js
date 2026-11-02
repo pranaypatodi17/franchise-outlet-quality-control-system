@@ -215,11 +215,20 @@
     };
   }
 
-  const DRAW = { storefront, counter, dining, back };
-  const LABELS = { storefront: 'Storefront & signage', counter: 'Service counter', dining: 'Dining floor', back: 'Back of house' };
+  const ILLUSTRATED = { storefront, counter, dining, back };
+  const LABELS = { storefront: 'Storefront & signage', counter: 'Service counter', dining: 'Dining floor', back: 'Staff & billing' };
 
+  /* Real photographs (Unsplash licence). Boxes are in the 800x500 frame of each photo. */
+  const PHOTO = {
+    storefront: { src: 'assets/img/storefront.jpg', boxes: { sign_unlit: [705, 25, 95, 110], promo_old: [590, 194, 38, 54], logo_blocked: [458, 318, 145, 182] } },
+    counter: { src: 'assets/img/counter.jpg', boxes: { menu_old: [72, 38, 135, 305], cups_off: [225, 205, 225, 55], pastry_off: [295, 410, 505, 90], spill: [290, 372, 330, 36] } },
+    dining: { src: 'assets/img/dining.jpg', boxes: { seasonal_missing: [62, 318, 245, 72], tables_unwiped: [575, 350, 225, 72], floor_debris: [150, 428, 210, 72], bin_overflow: [0, 380, 92, 120], handwash_nosoap: [303, 284, 76, 54], extinguisher_blocked: [598, 190, 92, 130] } },
+    back: { src: 'assets/img/back.jpg', boxes: { no_apron: [0, 140, 232, 350], uniform_stained: [18, 190, 170, 160], pest_log: [440, 18, 100, 150] } },
+  };
+  const DRAW = {};
+  Object.keys(PHOTO).forEach((k) => (DRAW[k] = (d) => ({ svg: `<image href="${PHOTO[k].src}" x="0" y="0" width="800" height="500" preserveAspectRatio="xMidYMid slice"/>`, boxes: PHOTO[k].boxes })));
   const BOXES = {};
-  Object.keys(DRAW).forEach((k) => (BOXES[k] = DRAW[k]([]).boxes));
+  Object.keys(PHOTO).forEach((k) => (BOXES[k] = PHOTO[k].boxes));
 
   /* opts: {detect:'fails'|'all'|'none', labels:bool, findings: {vid:{short,conf}}, vsupport} */
   function render(scene, defects, opts) {
